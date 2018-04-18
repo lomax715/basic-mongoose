@@ -27,11 +27,16 @@ describe('Movie', () => {
         return validation.errors;
     };
 
-    it('name is required field', () => {
+    it('title of movie is required field', () => {
         const movie = new Movie({});
         const errors = getValidationErrors(movie.validateSync());
-        assert.equal(Object.keys(errors).length, 1);
         assert.equal(errors.title.kind, 'required');
+    });
+
+    it('director of movie is required field', () => {
+        const movie = new Movie({});
+        const errors = getValidationErrors(movie.validateSync());
+        assert.equal(errors.director.kind, 'required');
     });
 
 });
