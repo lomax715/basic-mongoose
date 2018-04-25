@@ -72,4 +72,11 @@ describe('movie api', () => {
                 assert.deepEqual(body, [MovieA, MovieB].map(getFields));
             });
     });
+
+    it('queries a movie', () => {
+        return request.get('/movies?genre=Action')
+            .then(({ body }) => {
+                assert.deepEqual(body, [MovieB].map(getFields));
+            });
+    });
 });
