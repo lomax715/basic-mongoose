@@ -1,6 +1,6 @@
 const { assert } = require('chai');
 const request = require('./request');
-// const Movie = require('../../lib/models/movie');
+const Movie = require('../../lib/models/movie');
 const { dropCollection } = require('./db');
 
 describe('movie api', () => {
@@ -14,11 +14,13 @@ describe('movie api', () => {
         cast: ['Will F']
     };
 
-    // let MovieB = {
-    //     teamName: 'Star Wars',
-    //     director: 'Darth Vader',
-    //     cast: ['Harrison Ford']
-    // };
+    let MovieB = {
+        title: 'Star Wars',
+        director: 'Darth Vader',
+        year: '1980',
+        genre: ['Action'],
+        cast: ['Harrison Ford']
+    };
 
     it('saves and gets a movie', () => {
         return request.post('/movies')
@@ -32,6 +34,19 @@ describe('movie api', () => {
                     ...MovieA
                 });
                 MovieA = body;
+            });
+    });
+
+    const roundTrip = doc => JSON.parse(JSON.stringify(doc.toJSON()));
+
+    it('gets movie by id', () => {
+        return Movie.create(MovieB).then(roundTrip)
+            .then(saved => {
+                MovieB = saved;
+                return request.get(`/movies/${MovieB._id}`);
+            })
+            .then(({ body }) => {
+                assert.deepEqual(body, MovieB);
             });
     });
 });
