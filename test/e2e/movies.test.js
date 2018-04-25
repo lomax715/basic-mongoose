@@ -49,4 +49,18 @@ describe('movie api', () => {
                 assert.deepEqual(body, MovieB);
             });
     });
+
+    it('update a movie', () => {
+        MovieB.director = 'Luke Skywalker';
+
+        return request.put(`/movies/${MovieB._id}`)
+            .send(MovieB)
+            .then(({ body }) => {
+                assert.deepEqual(body, MovieB);
+                return Movie.findById(MovieB._id).then(roundTrip);
+            })
+            .then(updated => {
+                assert.deepEqual(updated, MovieB);
+            });
+    });
 });
