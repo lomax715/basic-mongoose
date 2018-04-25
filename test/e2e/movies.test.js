@@ -63,4 +63,13 @@ describe('movie api', () => {
                 assert.deepEqual(updated, MovieB);
             });
     });
+
+    const getFields = ({ _id, title, director }) => ({ _id, title, director });
+
+    it('gets all teams but only _id, title, and director', () => {
+        return request.get('/movies')
+            .then(({ body }) => {
+                assert.deepEqual(body, [MovieA, MovieB].map(getFields));
+            });
+    });
 });
