@@ -79,4 +79,14 @@ describe('movie api', () => {
                 assert.deepEqual(body, [MovieB].map(getFields));
             });
     });
+
+    it('deletes movie by id', () => {
+        return request.delete(`/movies/${MovieB._id}`)
+            .then(() => {
+                return Movie.findById(MovieB._id);
+            })
+            .then(found => {
+                assert.isNull(found);
+            });
+    });
 });
